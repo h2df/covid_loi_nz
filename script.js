@@ -1,17 +1,23 @@
+const countryCenter = [-41.6, 174.5];
+const countryZoom = 5;
+const localZoom = 14;
+const propsToExclude = ["id", "Added"];
+
 const Run = () => {
-  const map = L.map("map").fitWorld();
+  //set the country at the map center with appropriate zoom level
+  const map = L.map("map").setView(countryCenter, countryZoom);
 
   //OSM tile layer
   L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "something cool",
+    attribution:
+      "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
   }).addTo(map);
-
 
   const onLocationFound = (e) => {
     L.marker(e.latlng).addTo(map);
   };
   map.on("locationfound", onLocationFound);
-  map.locate({ setView: true, maxZoom: 16 });
+  map.locate({ setView: true, maxZoom: localZoom });
 
   //geojson layer
   const geojsonLayer = new L.GeoJSON.AJAX(
@@ -21,11 +27,11 @@ const Run = () => {
         const props = feature.properties;
         let popupContent = "<table>";
         for (let prop in props) {
-          if (prop === "id") {
+          if (propsToExclude.includes(prop)) {
             continue;
           }
           if (props.hasOwnProperty(prop)) {
-            popupContent += `<tr><td>${prop}</td><td>${props[prop]}</td></tr>`
+            popupContent += `<tr><td>${prop}</td><td>${props[prop]}</td></tr>`;
           }
         }
         popupContent += "</table>";
