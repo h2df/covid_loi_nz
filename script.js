@@ -1,44 +1,36 @@
 const Run = () => {
-  const onLocationFound = (e) => {
-    L.marker(e.latlng).addTo(map);
-  };
-  var map = L.map("map").fitWorld();
+  const map = L.map("map").fitWorld();
+
+  //OSM tile layer
   L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "something cool",
   }).addTo(map);
 
-  map.locate({ setView: true, maxZoom: 16 });
+
+  const onLocationFound = (e) => {
+    L.marker(e.latlng).addTo(map);
+  };
   map.on("locationfound", onLocationFound);
-  var geojsonLayer = new L.GeoJSON.AJAX(
+  map.locate({ setView: true, maxZoom: 16 });
+
+  //geojson layer
+  const geojsonLayer = new L.GeoJSON.AJAX(
     "https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson",
     {
       pointToLayer: (feature, latlng) => {
-        const popupContent = `<table>
-                                <tr>
-                                  <td> Event: </td>
-                                  <td>${feature.properties.Event}</td>
-                                </tr>
-                                <tr>
-                                  <td> Location: </td>
-                                  <td>${feature.properties.Location}</td>
-                                </tr>
-                                <tr>
-                                  <td> Start: </td>
-                                  <td>${feature.properties.Start}</td>
-                                </tr>
-                                <tr>
-                                  <td> End: </td>
-                                  <td>${feature.properties.End}</td>
-                                </tr>
-                                <tr>
-                                  <td> Advice: </td>
-                                  <td>${feature.properties.Advice}</td>
-                                </tr>
-                           </table>`;
-        const popupOptions = {
-          className: "loli-popup",
-        };
-        var loiIcon = new L.Icon({
+        const props = feature.properties;
+        let popupContent = "<table>";
+        for (let prop in props) {
+          if (prop === "id") {
+            continue;
+          }
+          if (props.hasOwnProperty(prop)) {
+            popupContent += `<tr><td>${prop}</td><td>${props[prop]}</td></tr>`
+          }
+        }
+        popupContent += "</table>";
+
+        const loiIcon = new L.Icon({
           iconUrl:
             "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png",
           shadowUrl:
@@ -48,6 +40,11 @@ const Run = () => {
           popupAnchor: [1, -34],
           shadowSize: [41, 41],
         });
+
+        const popupOptions = {
+          className: "loli-popup",
+        };
+
         return L.marker(latlng, { icon: loiIcon }).bindPopup(
           popupContent,
           popupOptions
