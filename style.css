@@ -1,1 +1,4 @@
-#mapid { height: 100vh; }
+#map { height: 100vh; }
+.loli-popup td{
+    border: 1px solid black;
+}
