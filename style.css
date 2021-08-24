@@ -1,4 +1,19 @@
+body {
+    padding: 0;
+    margin: 0;
+}
 #map { height: 100vh; }
+#date-control {
+    background-color: #e9e9ed;
+    position: absolute;
+    right: 10px;
+    z-index: 1000;
+}
+
+.loli-popup{
+    max-width: 90vw;
+}
+
 .loli-popup td{
     border: 1px solid black;
 }
