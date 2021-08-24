@@ -135,7 +135,7 @@ const Run = () => {
   };
 
   const renderData = (data) => {
-    let selectedDate = new Date("17 Aug 2021");
+    let selectedDate = new Date();
     renderMap(data, selectedDate);
     updateSelectedDateOnPage(selectedDate);
   };
