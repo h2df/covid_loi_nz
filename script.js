@@ -37,13 +37,18 @@ const Run = () => {
 
   const renderMap = (geoJson, selectedDate) => {
     const map = L.map("map").setView(countryCenter, countryZoom);
-
-    //set the user location (if provided) as the map center with appropriate zoom level
-    const onLocationFound = (e) => {
-      L.marker(e.latlng).addTo(map);
-    };
-    map.on("locationfound", onLocationFound);
-    map.locate({ setView: true, maxZoom: localZoom });
+    if (
+      !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    ) {
+      //set the user location (if provided) as the map center with appropriate zoom level
+      const onLocationFound = (e) => {
+        L.marker(e.latlng).addTo(map);
+      };
+      map.on("locationfound", onLocationFound);
+      map.locate({ setView: true, maxZoom: localZoom });
+    }
 
     //OSM tile layer
     L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
