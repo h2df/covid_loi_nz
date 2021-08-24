@@ -11,8 +11,7 @@ const Run = () => {
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
       shadowSize: [41, 41],
-      shadowUrl:
-        "./assets/marker-shadow.png",
+      shadowUrl: "./assets/marker-shadow.png",
     },
   });
   const loadJson = async (url) => {
@@ -48,9 +47,11 @@ const Run = () => {
 
     //OSM tile layer
     L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution:
-        "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, Data Source: <a href='https://github.com/minhealthnz/nz-covid-data/blob/main/locations-of-interest.geojson'>Ministry of Health</a>, Marker Assets: <a href='https://github.com/pointhi/leaflet-color-markers'>leaflet-color-markers</a>",
-      minZoom: countryZoom
+      attribution: `&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, 
+        Data Source: <a href='${loiUrl}'>Ministry of Health</a>, 
+        Marker Assets: <a href='https://github.com/pointhi/leaflet-color-markers'>leaflet-color-markers</a><br>
+        Disclaimer: This unofficial site does not promise the reliability or accuracy of the visualization. Please refer to the original data source when in doubt.`,
+      minZoom: countryZoom,
     }).addTo(map);
 
     const renderLoiLayer = () => {
@@ -104,8 +105,7 @@ const Run = () => {
       const defaultLoiLayer = createGeoJsonLayer(
         (f) => !isSelected(f),
         new loiIcon({
-          iconUrl:
-            "./assets/marker-icon-2x-yellow.png",
+          iconUrl: "./assets/marker-icon-2x-yellow.png",
         })
       );
       defaultLoiLayer.addTo(map);
