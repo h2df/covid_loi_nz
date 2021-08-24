@@ -36,7 +36,13 @@ const Run = () => {
   };
 
   const renderMap = (geoJson, selectedDate) => {
-    const map = L.map("map").setView(countryCenter, countryZoom);
+    const map = L.map("map", {
+      minZoom : countryZoom,
+    }).setView(countryCenter, countryZoom);
+    map.setMaxBounds(map.getBounds().pad(0.01)); //pad to avoid the leaflet bug causing map shaking
+
+    //there seems to be a bug in leaflet or geolocation API which can cause tile not loaded correctly
+    //so here we're doing user agent detecting to avoid geolocation on mobile device, which is not a suggested practice
     if (
       !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
@@ -44,7 +50,7 @@ const Run = () => {
     ) {
       //set the user location (if provided) as the map center with appropriate zoom level
       const onLocationFound = (e) => {
-        L.marker(e.latlng).addTo(map);
+        L.marker(e.latlng).addTo(map).bindPopup("Your Location");
       };
       map.on("locationfound", onLocationFound);
       map.locate({ setView: true, maxZoom: localZoom });
@@ -56,7 +62,6 @@ const Run = () => {
         Data Source: <a href='${loiUrl}'>Ministry of Health</a>, 
         Marker Assets: <a href='https://github.com/pointhi/leaflet-color-markers'>leaflet-color-markers</a><br>
         Disclaimer: This unofficial site does not promise the reliability or accuracy of the visualization. Please refer to the original data source when in doubt.`,
-      minZoom: countryZoom,
     }).addTo(map);
 
     const renderLoiLayer = () => {
