@@ -1,4 +1,5 @@
 const Run = () => {
+  //constants
   const loiUrl =
     "https://raw.githubusercontent.com/minhealthnz/nz-covid-data/main/locations-of-interest/august-2021/locations-of-interest.geojson";
   const countryCenter = [-41.6, 174.5];
@@ -14,6 +15,13 @@ const Run = () => {
       shadowUrl: "./assets/marker-shadow.png",
     },
   });
+
+  //helper functions
+  const parseDate = (s) => {
+    const substrs = s.split(",")[0].split("/");
+    return [substrs[0], substrs[1], substrs[2]];
+  };
+
   const loadJson = async (url) => {
     const response = await fetch(url);
     if (!response.ok) throw new Error(response.statusText);
@@ -92,11 +100,6 @@ const Run = () => {
           },
         });
 
-      //wtf js cannot parse dd/mm/yy?
-      const parseDate = (s) => {
-        const substrs = s.split(",")[0].split("/");
-        return [substrs[0], substrs[1], substrs[2]];
-      };
 
       const isSelectedDay = ([d, m, y]) => {
         const result =
@@ -145,7 +148,13 @@ const Run = () => {
   };
 
   const renderData = (data) => {
-    const selectedDate = new Date();
+    const dates = data.features.map((f) => { // map from "Day Month Year" string to date
+      const parsed = parseDate(f.properties.Start);
+      parsed[1] = parsed[1] - 1;
+      return new Date(...parsed.reverse());
+    });
+    const selectedDate = dates.reduce((prev, cur) => prev > cur ? prev : cur);
+
     renderMap(data, selectedDate);
     updateSelectedDateOnPage(selectedDate);
   };
