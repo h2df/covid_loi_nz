@@ -4,7 +4,7 @@ const Run = () => {
   const countryCenter = [-41.6, 174.5];
   const countryZoom = 5;
   const localZoom = 14;
-  const propsToExclude = ["id", "Added"];
+  const propsToExclude = ["id", "Added", "Updated"];
   const loiIcon = L.Icon.extend({
     options: {
       iconSize: [25, 41],
