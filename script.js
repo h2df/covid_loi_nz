@@ -127,7 +127,7 @@ const Run = () => {
         isSelected,
         new loiIcon({
           iconUrl:
-            "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+            "./assets/marker-icon-2x-red.png",
         })
       );
       selectedLoiLayer.addTo(map);
